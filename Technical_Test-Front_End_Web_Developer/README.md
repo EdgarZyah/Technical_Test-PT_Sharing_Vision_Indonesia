@@ -4,14 +4,15 @@ Aplikasi web HaloGold adalah platform investasi dan transaksi emas digital yang 
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
+- **Framework**: Next.js 16.2.10 (App Router)
+- **Language**: JavaScript
+- **Styling**: Tailwind CSS v4 (CSS-first config)
 - **State Management**: React Context API
 - **Form Handling**: React Hook Form + Zod
 - **Charts**: Chart.js (react-chartjs-2)
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
+- **API Client**: Fetch API dengan `AbortSignal.timeout()`
 
 ## Cara Menjalankan
 
@@ -23,6 +24,7 @@ Aplikasi web HaloGold adalah platform investasi dan transaksi emas digital yang 
 ### Install Dependencies
 
 ```bash
+cd Technical_Test-Front_End_Web_Developer
 npm install
 ```
 
@@ -41,71 +43,75 @@ npm run build
 npm start
 ```
 
-### Lint
-
-```bash
-npm run lint
-```
-
 ## Akun Demo
 
-| Email | Password |
-|-------|----------|
-| budi@halogold.com | password123 |
-| sinta@halogold.com | password123 |
+| Email           | Password    | Nama         | Saldo Emas | Saldo Rupiah |
+| --------------- | ----------- | ------------ | ---------- | ------------ |
+| budi@gmail.com  | password123 | Budi Hartono | 12.5432 gr | Rp 5.000.000 |
+| sinta@gmail.com | password123 | Sinta Dewi   | 5.2100 gr  | Rp 2.500.000 |
+
+Klik langsung pada akun demo di bawah form login untuk auto-login.
 
 ## Fitur
 
-### Wajib
-
-- [x] **Login** - Form email + password dengan validasi menggunakan Zod
-- [x] **Dashboard** - Nama pengguna, saldo emas (gram), nilai Rupiah, harga emas hari ini, grafik harga 30 hari, riwayat transaksi terakhir, shortcut menu
-- [x] **Beli Emas** - Input nominal Rupiah, konversi otomatis ke gram, ringkasan transaksi, konfirmasi pembelian
-- [x] **Riwayat Transaksi** - Tabel transaksi dengan filter, search, dan pagination
-- [x] **Profil** - Informasi akun, pengaturan keamanan
-
-### Nilai Tambahan
-
-- [x] **Dark Mode** - Toggle mode terang/gelap dengan persistensi di localStorage
-- [x] **Skeleton Loading** - Loading state untuk semua komponen
-- [x] **Pagination** - Pagination pada halaman riwayat transaksi
-- [x] **Search** - Pencarian transaksi berdasarkan nominal, jenis, atau status
-- [x] **Animation** - Transisi halaman dan komponen menggunakan Framer Motion
-- [x] **Responsive Design** - Sidebar desktop + mobile navigation
+- [x] **Login** 
+- [x] **Dashboard** 
+- [x] **Beli Emas** 
+- [x] **Riwayat Transaksi** 
+- [x] **Profil** 
+- [x] **Dark Mode** 
 
 ## Struktur Project
 
 ```
 src/
 ├── app/
-│   ├── (auth)/login/        # Login page
-│   ├── (main)/              # Authenticated layout
-│   │   ├── dashboard/       # Dashboard page
-│   │   ├── beli-emas/       # Beli emas page
-│   │   ├── riwayat/         # Riwayat transaksi page
-│   │   └── profil/          # Profil page
-│   ├── layout.tsx           # Root layout dengan providers
-│   └── page.tsx             # Redirect ke login/dashboard
+│   ├── (auth)/login/            # Login page (akun demo clickable)
+│   ├── (main)/                  # Authenticated layout
+│   │   ├── dashboard/           # Dashboard page
+│   │   ├── beli-emas/           # Trading emas (grafik live + panel beli/jual)
+│   │   ├── riwayat/             # Riwayat transaksi page
+│   │   └── profil/              # Profil page
+│   ├── layout.jsx               # Root layout dengan providers (Auth, Theme, Toast)
+│   └── page.jsx                 # Root redirect ke login/dashboard
 ├── components/
-│   ├── ui/                  # Reusable UI (Button, Card, Input, Badge, Modal, Skeleton)
-│   ├── layout/              # Layout (Sidebar, Header, MobileNav)
-│   └── features/            # Feature-specific components
-│       ├── dashboard/       # BalanceCard, GoldPriceCard, GoldChart, QuickActions, RecentTransactions
-│       ├── beli-emas/       # BuyForm
-│       └── riwayat/         # TransactionList
-├── contexts/                # AuthContext, ThemeContext
-├── data/                    # Mock data (users, goldPrices, transactions)
-├── hooks/                   # useGold, useTransactions
-├── lib/                     # utils.ts (formatters, helpers)
-└── types/                   # TypeScript interfaces
-server/
-└── db.json                  # Referensi struktur data dummy
+│   ├── ui/                      # Komponen reusable
+│   │   ├── Button.jsx           # Tombol (primary, secondary, outline, ghost, danger, buy, sell)
+│   │   ├── Input.jsx            # Input dengan label, error, ikon
+│   │   ├── Card.jsx             # Kontainer kartu
+│   │   ├── Badge.jsx            # Badge status dan jenis transaksi
+│   │   ├── Modal.jsx            # Modal animasi dengan backdrop (z-[100])
+│   │   ├── Skeleton.jsx         # Placeholder loading
+│   │   └── Toast.jsx            # Toast notification (createPortal, mounted guard)
+│   ├── layout/
+│   │   ├── Header.jsx           # Bar atas (hamburger, notifikasi, avatar)
+│   │   ├── Sidebar.jsx          # Sidebar desktop (navigasi, toggle tema, logout modal)
+│   │   └── MobileNav.jsx        # Navigasi mobile slide-in dengan logout modal
+│   └── features/
+│       ├── dashboard/
+│       │   ├── BalanceCard.jsx   # Kartu saldo emas + saldo Rupiah + buyback
+│       │   ├── GoldPriceCard.jsx # Kartu harga emas hari ini
+│       │   ├── GoldPricePanel.jsx # Panel info harga buy/sell
+│       │   ├── GoldChart.jsx     # Grafik harga 30 hari (emerald buy, amber sell)
+│       │   ├── QuickActions.jsx  # Shortcut menu
+│       │   └── RecentTransactions.jsx # 5 transaksi terakhir
+│       ├── beli-emas/
+│       │   └── BuyForm.jsx       # Form beli emas (tidak aktif, halaman utama di beli-emas/page.jsx)
+│       ├── trading/
+│       │   ├── MarketHeader.jsx  # Header trading (harga live, perubahan %, saldo)
+│       │   ├── TradingChart.jsx  # Grafik dual-line (buy emerald solid, sell amber dashed)
+│       │   └── TradePanel.jsx    # Panel beli/jual dengan validasi saldo
+│       └── riwayat/
+│           └── TransactionList.jsx # Daftar transaksi (tabel + kartu mobile)
+├── contexts/
+│   ├── AuthContext.jsx           # Autentikasi (login/logout, localStorage)
+│   └── ThemeContext.jsx          # Dark mode (sistem preference, localStorage)
+├── hooks/
+│   ├── useGold.js                # Data harga emas (API-first + mock fallback)
+│   └── useTransactions.js        # Data transaksi per user (mock)
+├── data/
+│   └── mock.js                   # Data dummy (users, goldPrices, transactions)
+├── lib/
+│   ├── api.js                    # API client (microservice + external API)
+│   └── utils.js                  # Fungsi utilitas (formatRupiah, formatGram, calculateGram, dll)
 ```
-
-## Asumsi dan Batasan
-
-- **Data Dummy**: Semua data (harga emas, transaksi, user) di-hardcode langsung di frontend sebagai mock data di `src/data/mock.ts`. Tidak ada backend atau API server yang diakses.
-- **Harga Emas**: Menggunakan data dummy statis, bukan harga real-time.
-- **Payment Gateway**: Tidak diintegrasikan. Proses pembelian hanya simulasi.
-- **Login**: Login hanya memeriksa credential terhadap data dummy, tanpa JWT atau session token.
-- **Data Emas**: Saldo emas hanya di-update di client-side (localStorage), bukan di database persisten.
