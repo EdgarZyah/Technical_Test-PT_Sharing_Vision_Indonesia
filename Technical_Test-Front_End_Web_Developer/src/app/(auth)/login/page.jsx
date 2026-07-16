@@ -6,10 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Coins } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, UserCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useAuth } from "@/contexts/AuthContext";
+import { mockUsers } from "@/data/mock";
 
 const loginSchema = z.object({
   email: z
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -41,6 +43,19 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       await login(data.email, data.password);
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDemoLogin = async (email, password) => {
+    setError("");
+    setIsSubmitting(true);
+    try {
+      await login(email, password);
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
@@ -61,11 +76,15 @@ export default function LoginPage() {
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500 text-white mb-4 shadow-lg shadow-amber-500/30"
+            className="mb-4"
           >
-            <Coins size={32} />
+            <img
+              src="/images/gold-bar.png"
+              alt="Halo Emas"
+              className="w-20 h-20 mx-auto drop-shadow-lg"
+            />
           </motion.div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">HaloGold</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Halo Emas</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Investasi Emas Digital Anda
           </p>
@@ -125,17 +144,30 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 p-3 bg-gray-50 rounded-xl dark:bg-gray-700/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-2 font-medium">
-              Akun Demo:
-            </p>
-            <div className="space-y-1 text-xs text-gray-600 dark:text-gray-300">
-              <p>
-                <span className="font-medium">Email:</span> budi@halogold.com
-              </p>
-              <p>
-                <span className="font-medium">Password:</span> password123
-              </p>
+          <div className="mt-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
+              <p className="text-xs text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">Atau masuk dengan akun demo</p>
+              <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
+            </div>
+            <div className="space-y-2">
+              {mockUsers.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => handleDemoLogin(u.email, u.password)}
+                  disabled={isSubmitting}
+                  className="w-full flex items-center gap-3 p-3 bg-gray-50 hover:bg-amber-50 dark:bg-gray-700/50 dark:hover:bg-amber-900/20 border border-gray-200 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-700 rounded-xl transition-all duration-200 cursor-pointer disabled:opacity-50"
+                >
+                  <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
+                    <UserCircle size={22} className="text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{u.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{u.email}</p>
+                  </div>
+                  <span className="text-xs text-amber-600 dark:text-amber-400 font-medium shrink-0">Login</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>

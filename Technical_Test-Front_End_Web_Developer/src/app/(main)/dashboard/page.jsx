@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGold } from "@/hooks/useGold";
 import { useTransactions } from "@/hooks/useTransactions";
 import BalanceCard from "@/components/features/dashboard/BalanceCard";
-import GoldPriceCard from "@/components/features/dashboard/GoldPriceCard";
+import GoldPricePanel from "@/components/features/dashboard/GoldPricePanel";
 import GoldChart from "@/components/features/dashboard/GoldChart";
 import QuickActions from "@/components/features/dashboard/QuickActions";
 import RecentTransactions from "@/components/features/dashboard/RecentTransactions";
@@ -15,15 +15,21 @@ export default function DashboardPage() {
   const { transactions, isLoading: txLoading } = useTransactions(user?.id || 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      <img
+        src="/images/gold-bar.png"
+        alt=""
+        className="absolute -top-2 -right-2 w-36 h-36 opacity-[0.06] -rotate-12 select-none pointer-events-none hidden lg:block"
+      />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <BalanceCard
           userName={user?.name || "User"}
           goldBalance={user?.goldBalance || 0}
-          goldPrice={currentPrice?.buy || 0}
+          rupiahBalance={user?.balance || 0}
+          goldPrice={currentPrice?.sell || 0}
           isLoading={goldLoading}
         />
-        <GoldPriceCard price={currentPrice} isLoading={goldLoading} />
+        <GoldPricePanel price={currentPrice} priceHistory={priceHistory} isLoading={goldLoading} />
       </div>
 
       <QuickActions />
