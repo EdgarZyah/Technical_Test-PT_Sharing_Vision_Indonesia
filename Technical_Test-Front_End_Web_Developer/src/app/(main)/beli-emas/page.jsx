@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { useGold } from "@/hooks/useGold";
 import { useAuth } from "@/contexts/AuthContext";
 import MarketHeader from "@/components/features/trading/MarketHeader";
@@ -35,9 +36,12 @@ export default function BeliEmasPage() {
 
   return (
     <div className="space-y-0 -mx-4 sm:-mx-6 -mt-6 bg-white dark:bg-gray-950 h-min relative">
-      <img
+      <Image
         src="/images/gold-bar.png"
         alt=""
+        width={192}
+        height={192}
+        unoptimized
         className="absolute top-14 left-1/2 -translate-x-1/2 w-48 h-48 opacity-[0.04] select-none pointer-events-none hidden lg:block"
       />
       <MarketHeader price={currentPrice} priceHistory={priceHistory} userBalance={user?.goldBalance || 0} rupiahBalance={user?.balance || 0} isLoading={isLoading} />

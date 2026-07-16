@@ -13,7 +13,10 @@ export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const addToast = useCallback((message, type = "error") => {
     const id = ++toastId;

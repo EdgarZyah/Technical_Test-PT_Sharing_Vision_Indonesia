@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Coins, TrendingUp, Wallet, ArrowRight } from "lucide-react";
+import { Coins, Wallet, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import Card from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -41,9 +42,12 @@ export default function BalanceCard({
         {/* Dekorasi Background */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-        <img
+        <Image
           src="/images/gold-bar.png"
           alt=""
+          width={112}
+          height={112}
+          unoptimized
           className="absolute -right-4 -bottom-4 w-28 h-28 opacity-10 rotate-12 select-none pointer-events-none"
         />
 

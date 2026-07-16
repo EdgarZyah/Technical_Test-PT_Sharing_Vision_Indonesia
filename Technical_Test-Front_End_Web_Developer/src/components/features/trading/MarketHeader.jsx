@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import Image from "next/image";
 import { formatRupiah, formatGram } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -51,7 +52,7 @@ export default function MarketHeader({ price, priceHistory = [], userBalance = 0
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 flex items-center justify-center shrink-0">
-            <img src="/images/gold-bar.png" alt="" className="w-7 h-7" />
+            <Image src="/images/gold-bar.png" alt="" width={28} height={28} unoptimized className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">

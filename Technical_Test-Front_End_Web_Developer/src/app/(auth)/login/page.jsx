@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, UserCircle } from "lucide-react";
+import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,7 +33,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -78,9 +78,12 @@ export default function LoginPage() {
             transition={{ type: "spring", stiffness: 200 }}
             className="mb-4"
           >
-            <img
+            <Image
               src="/images/gold-bar.png"
               alt="Halo Emas"
+              width={80}
+              height={80}
+              unoptimized
               className="w-20 h-20 mx-auto drop-shadow-lg"
             />
           </motion.div>

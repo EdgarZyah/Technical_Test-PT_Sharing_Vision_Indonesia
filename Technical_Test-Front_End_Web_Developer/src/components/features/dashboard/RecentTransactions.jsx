@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Card from "@/components/ui/Card";
@@ -68,7 +69,7 @@ export default function RecentTransactions({ transactions, isLoading }) {
                       : "bg-red-50 dark:bg-red-900/20"
                   }`}
                 >
-                  <img src="/images/gold-bar.png" alt="" className="w-5 h-5" />
+                  <Image src="/images/gold-bar.png" alt="" width={20} height={20} unoptimized className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">

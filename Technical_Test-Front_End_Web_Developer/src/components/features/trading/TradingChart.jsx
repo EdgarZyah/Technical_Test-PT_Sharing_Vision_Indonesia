@@ -38,6 +38,8 @@ const crosshairPlugin = {
   },
 };
 
+const SkeletonHeights = [55, 72, 48, 83, 61, 90, 38, 75, 52, 68, 45, 78];
+
 export default function TradingChart({ priceHistory, isLoading }) {
   const { isDark } = useTheme();
   const chartRef = useRef(null);
@@ -69,7 +71,6 @@ export default function TradingChart({ priceHistory, isLoading }) {
       return d.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
     });
 
-    const buyUp = buyPrices[buyPrices.length - 1] >= buyPrices[0];
     const buyColor = "#10b981";
     const sellColor = "#f59e0b";
     const fillColorTop = isDark ? "rgba(16,185,129,0.15)" : "rgba(16,185,129,0.10)";
@@ -203,8 +204,8 @@ export default function TradingChart({ priceHistory, isLoading }) {
         </div>
         <div className="px-3 pb-4 flex-1 min-h-0">
           <div className="h-[260px] sm:h-[340px] lg:h-full flex items-end gap-1 px-4 pb-8 pt-6">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <Skeleton key={i} className="flex-1 rounded-t" style={{ height: `${30 + Math.random() * 60}%` }} />
+            {SkeletonHeights.map((h, i) => (
+              <Skeleton key={i} className="flex-1 rounded-t" style={{ height: `${h}%` }} />
             ))}
           </div>
         </div>

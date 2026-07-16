@@ -3,6 +3,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useGold } from "@/hooks/useGold";
 import { useTransactions } from "@/hooks/useTransactions";
+import Image from "next/image";
 import BalanceCard from "@/components/features/dashboard/BalanceCard";
 import GoldPricePanel from "@/components/features/dashboard/GoldPricePanel";
 import GoldChart from "@/components/features/dashboard/GoldChart";
@@ -16,9 +17,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 relative">
-      <img
+      <Image
         src="/images/gold-bar.png"
         alt=""
+        width={144}
+        height={144}
+        unoptimized
         className="absolute -top-2 -right-2 w-36 h-36 opacity-[0.06] -rotate-12 select-none pointer-events-none hidden lg:block"
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

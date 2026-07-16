@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -35,7 +36,7 @@ export default function Sidebar() {
     <>
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-r lg:border-gray-200 lg:bg-white lg:dark:bg-gray-800 lg:dark:border-gray-700 lg:fixed lg:inset-y-0 lg:left-0">
       <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-        <img src="/images/gold-bar.png" alt="Halo Emas" className="w-10 h-10" />
+        <Image src="/images/gold-bar.png" alt="Halo Emas" width={40} height={40} unoptimized className="w-10 h-10" />
         <div>
           <h1 className="text-lg font-bold text-gray-900 dark:text-white">Halo Emas</h1>
           <p className="text-xs text-gray-500 dark:text-gray-400">Investasi Emas Digital</p>

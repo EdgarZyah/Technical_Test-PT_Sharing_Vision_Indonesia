@@ -34,8 +34,8 @@ export function AuthProvider({ children }) {
     await simulateDelay(600);
     const found = mockUsers.find((u) => u.email === email && u.password === password);
     if (!found) throw new Error("Email atau password salah");
-    // eslint-disable-next-line no-unused-vars
-    const { password: _pw, ...safe } = found;
+    const safe = { ...found };
+    delete safe.password;
     localStorage.setItem("Halo Emas_user", JSON.stringify(safe));
     setUser(safe);
   }, []);

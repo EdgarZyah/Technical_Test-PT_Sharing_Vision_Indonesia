@@ -35,6 +35,7 @@ export default function BuyForm({ goldPrice, isLoading, onBuy }) {
     defaultValues: { amount: 0 },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const amount = watch("amount") || 0;
   const gram = useMemo(() => calculateGram(amount, goldPrice || 0), [amount, goldPrice]);
 
