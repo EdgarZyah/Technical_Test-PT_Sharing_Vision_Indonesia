@@ -2,25 +2,25 @@ export const mockUsers = [
   {
     id: 1,
     name: "Budi Hartono",
-    email: "budi@halogold.com",
+    email: "budi@gmail.com",
     password: "password123",
     goldBalance: 12.5432,
-    balance: 0,
+    balance: 5000000,
     avatar: null,
   },
   {
     id: 2,
     name: "Sinta Dewi",
-    email: "sinta@halogold.com",
+    email: "sinta@gmail.com",
     password: "password123",
     goldBalance: 5.21,
-    balance: 0,
+    balance: 2500000,
     avatar: null,
   },
 ];
 
 export const mockGoldPrices = [
-  { id: 1, date: "2026-07-16", buy: 1943800, sell: 1925000 },
+  { id: 1, date: "2026-07-16", buy: 1945200, sell: 1925000 },
   { id: 2, date: "2026-07-15", buy: 1943800, sell: 1923500 },
   { id: 3, date: "2026-07-14", buy: 1940500, sell: 1920100 },
   { id: 4, date: "2026-07-13", buy: 1938200, sell: 1918000 },
