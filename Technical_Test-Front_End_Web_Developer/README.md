@@ -2,6 +2,10 @@
 
 Aplikasi web HaloGold adalah platform investasi dan transaksi emas digital yang dibangun dengan Next.js. Aplikasi ini memungkinkan pengguna membeli emas, melihat riwayat transaksi, memantau harga emas, dan mengelola profil.
 
+## Demo Live
+
+https://haloemas-sand.vercel.app
+
 ## Tech Stack
 
 - **Framework**: Next.js 16.2.10 (App Router)

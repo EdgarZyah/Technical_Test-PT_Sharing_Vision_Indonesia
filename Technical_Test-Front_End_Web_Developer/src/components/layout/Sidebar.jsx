@@ -10,12 +10,9 @@ import {
   History,
   User,
   LogOut,
-  Sun,
-  Moon,
 } from "lucide-react";
 import { classNames } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
-import { useTheme } from "@/contexts/ThemeContext";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
@@ -29,7 +26,6 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { logout } = useAuth();
-  const { isDark, toggle } = useTheme();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   return (
@@ -65,13 +61,6 @@ export default function Sidebar() {
       </nav>
 
       <div className="px-3 py-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
-        <button
-          onClick={toggle}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white w-full transition-colors focus-visible:ring-2 focus-visible:ring-amber-500/40 cursor-pointer"
-        >
-          {isDark ? <Sun size={20} /> : <Moon size={20} />}
-          {isDark ? "Mode Terang" : "Mode Gelap"}
-        </button>
         <button
           onClick={() => setShowLogoutConfirm(true)}
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 w-full transition-colors focus-visible:ring-2 focus-visible:ring-amber-500/40 cursor-pointer"

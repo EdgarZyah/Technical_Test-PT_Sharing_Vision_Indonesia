@@ -1,10 +1,12 @@
 "use client";
 
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Header({ onMenuToggle, title }) {
   const { user } = useAuth();
+  const { isDark, toggle } = useTheme();
 
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-gray-800/80 dark:border-gray-700">
@@ -24,6 +26,13 @@ export default function Header({ onMenuToggle, title }) {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggle}
+            className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 focus-visible:ring-2 focus-visible:ring-amber-500/40 cursor-pointer"
+            title={isDark ? "Mode Terang" : "Mode Gelap"}
+          >
+            {isDark ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           <button className="relative p-2 rounded-xl text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 focus-visible:ring-2 focus-visible:ring-amber-500/40 cursor-pointer">
             <Bell size={20} />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
