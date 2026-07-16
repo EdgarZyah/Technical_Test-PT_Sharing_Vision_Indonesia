@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { BarChart3, TrendingDown, Target, User } from "lucide-react";
 
 const actions = [
-  { href: "/halogold_emas", label: "Beli Emas", icon: BarChart3, color: "bg-amber-500" },
+  { href: "/beli-emas", label: "Beli Emas", icon: BarChart3, color: "bg-amber-500" },
   { href: "/riwayat", label: "Riwayat", icon: TrendingDown, color: "bg-emerald-500" },
   { href: "/dashboard", label: "Target Emas", icon: Target, color: "bg-blue-500" },
   { href: "/profil", label: "Profil", icon: User, color: "bg-purple-500" },

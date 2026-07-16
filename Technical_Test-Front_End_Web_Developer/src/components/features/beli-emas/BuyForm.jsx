@@ -129,6 +129,7 @@ export default function BuyForm({ goldPrice, isLoading, onBuy }) {
               fullWidth
               size="lg"
               disabled={!amount || amount < 50000}
+              className="bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20"
             >
               Beli Emas Sekarang
               <ArrowRight size={18} className="ml-2" />
@@ -161,7 +162,7 @@ export default function BuyForm({ goldPrice, isLoading, onBuy }) {
             <Button variant="secondary" fullWidth onClick={() => setShowConfirm(false)}>
               Batal
             </Button>
-            <Button fullWidth onClick={handleConfirm}>
+            <Button fullWidth onClick={handleConfirm} className="bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20">
               Konfirmasi
             </Button>
           </div>

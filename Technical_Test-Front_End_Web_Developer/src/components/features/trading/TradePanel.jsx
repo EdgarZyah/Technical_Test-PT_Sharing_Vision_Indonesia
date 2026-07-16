@@ -6,9 +6,12 @@ import { Coins, CheckCircle2 } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { formatRupiah, formatGram, calculateGram, calculateRupiah } from "@/lib/utils";
+import { useToast } from "@/components/ui/Toast";
 
-export default function TradePanel({ currentPrice, userBalance, isLoading }) {
+export default function TradePanel({ currentPrice, userBalance, rupiahBalance = 0, isLoading }) {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState("buy");
   const [inputMode, setInputMode] = useState("rupiah");
   const [amount, setAmount] = useState("");
@@ -28,10 +31,35 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
   }, [amount, inputMode, activePrice]);
 
   const quickAmounts = activeTab === "buy"
-    ? [100000, 500000, 1000000, 5000000]
-    : [];
+    ? inputMode === "rupiah"
+      ? [100000, 500000, 1000000, 5000000]
+      : [0.1, 0.5, 1, 5]
+    : inputMode === "rupiah"
+      ? (sellPrice > 0 ? [100000, 500000, 1000000, 5000000].filter((v) => v > 0) : [])
+      : (userBalance > 0 ? [0.1, 0.5, 1, 5] : []);
 
   const maxGram = activeTab === "sell" ? userBalance : 0;
+
+  const handleOpenConfirm = () => {
+    const val = parseFloat(amount) || 0;
+    if (val <= 0) return;
+
+    if (activeTab === "buy") {
+      const cost = inputMode === "rupiah" ? val : calculated.rupiah;
+      if (cost > rupiahBalance) {
+        toast(`Saldo Rupiah tidak mencukupi. Saldo Anda: ${formatRupiah(rupiahBalance)}`);
+        return;
+      }
+    } else {
+      const gram = inputMode === "gram" ? val : calculated.gram;
+      if (gram > userBalance) {
+        toast(`Saldo emas tidak mencukupi. Saldo Anda: ${formatGram(userBalance)}`);
+        return;
+      }
+    }
+
+    setShowConfirm(true);
+  };
 
   const handleConfirm = () => {
     setShowConfirm(false);
@@ -44,19 +72,42 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-900 p-4 space-y-4">
-        <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-        <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-        <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-        <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+      <div className="bg-white dark:bg-gray-900 h-full flex flex-col">
+        <div className="flex border-b border-gray-200 dark:border-gray-800">
+          <div className="flex-1 py-3"><Skeleton className="h-4 w-20 mx-auto" /></div>
+          <div className="flex-1 py-3"><Skeleton className="h-4 w-20 mx-auto" /></div>
+        </div>
+        <div className="p-4 space-y-4 flex-1">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-7 w-24 rounded-lg" />
+            <Skeleton className="h-4 w-16" />
+          </div>
+          <Skeleton className="h-12 w-full rounded-lg" />
+          <div className="grid grid-cols-4 gap-1.5">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-7 rounded" />
+            ))}
+          </div>
+          <div className="space-y-2.5 py-2">
+            <div className="flex justify-between"><Skeleton className="h-3 w-12" /><Skeleton className="h-3 w-28" /></div>
+            <div className="flex justify-between"><Skeleton className="h-3 w-20" /><Skeleton className="h-3 w-28" /></div>
+            <div className="flex justify-between pt-2.5 border-t border-gray-200 dark:border-gray-800"><Skeleton className="h-3.5 w-10" /><Skeleton className="h-3.5 w-28" /></div>
+          </div>
+          <Skeleton className="h-12 w-full rounded-lg" />
+          <div className="bg-gray-100 dark:bg-gray-800/50 rounded-lg p-3 space-y-1.5">
+            <div className="flex justify-between"><Skeleton className="h-3 w-14" /><Skeleton className="h-3 w-20" /></div>
+            <div className="flex justify-between"><Skeleton className="h-3 w-18" /><Skeleton className="h-3 w-28" /></div>
+            <div className="flex justify-between"><Skeleton className="h-3 w-16" /><Skeleton className="h-3 w-28" /></div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 lg:h-full lg:overflow-y-auto">
-        <div className="flex border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-gray-900 h-full flex flex-col lg:overflow-y-auto">
+        <div className="flex border-b border-gray-200 dark:border-gray-800 shrink-0">
           <button
             onClick={() => { setActiveTab("buy"); setAmount(""); }}
             className={`flex-1 py-3 text-sm font-semibold transition-colors cursor-pointer ${
@@ -79,7 +130,7 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto">
           <div className="flex items-center justify-between">
             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
               <button
@@ -103,9 +154,16 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
                 Gram
               </button>
             </div>
-            {activeTab === "sell" && (
+            {activeTab === "buy" ? (
               <button
-                onClick={() => setAmount(maxGram.toString())}
+                onClick={() => { setInputMode("rupiah"); setAmount(rupiahBalance.toString()); }}
+                className="text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 cursor-pointer"
+              >
+                Saldo: {formatRupiah(rupiahBalance)}
+              </button>
+            ) : (
+              <button
+                onClick={() => { setInputMode("gram"); setAmount(maxGram.toString()); }}
                 className="text-xs text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 cursor-pointer"
               >
                 Saldo: {formatGram(maxGram)}
@@ -141,15 +199,21 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
             </div>
           )}
 
-          {activeTab === "buy" && (
+          {quickAmounts.length > 0 && (
             <div className="grid grid-cols-4 gap-1.5">
               {quickAmounts.map((q) => (
                 <button
                   key={q}
                   onClick={() => setAmount(q.toString())}
-                  className="py-1.5 text-[10px] font-medium rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                  className={`py-1.5 text-[10px] font-medium rounded transition-colors cursor-pointer ${
+                    activeTab === "buy"
+                      ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+                      : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+                  }`}
                 >
-                  {q >= 1000000 ? `${q / 1000000}jt` : `${q / 1000}rb`}
+                  {inputMode === "rupiah"
+                    ? q >= 1000000 ? `${q / 1000000}jt` : `${q / 1000}rb`
+                    : `${q} gr`}
                 </button>
               ))}
             </div>
@@ -177,23 +241,22 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
           </div>
 
           <Button
+            variant={activeTab === "buy" ? "buy" : "sell"}
             fullWidth
             size="lg"
             disabled={!amount || parseFloat(amount) <= 0}
-            onClick={() => setShowConfirm(true)}
-            className={`font-bold text-sm py-3 rounded-lg ${
-              activeTab === "buy"
-                ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20"
-                : "bg-red-500 hover:bg-red-400 text-white shadow-lg shadow-red-500/20"
-            }`}
+            onClick={handleOpenConfirm}
+            className="font-bold text-sm py-3 rounded-lg"
           >
             {activeTab === "buy" ? "Beli Emas" : "Jual Emas"}
           </Button>
 
           <div className="bg-gray-100 dark:bg-gray-800/50 rounded-lg p-3 space-y-1.5">
             <div className="flex justify-between text-[11px]">
-              <span className="text-gray-500">Tersedia</span>
-              <span className="text-gray-700 dark:text-gray-300">{formatGram(userBalance)}</span>
+              <span className="text-gray-500">{activeTab === "buy" ? "Saldo Rupiah" : "Saldo Emas"}</span>
+              <span className="text-gray-700 dark:text-gray-300 tabular-nums">
+                {activeTab === "buy" ? formatRupiah(rupiahBalance) : formatGram(userBalance)}
+              </span>
             </div>
             <div className="flex justify-between text-[11px]">
               <span className="text-gray-500">Harga beli</span>
@@ -226,7 +289,7 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
             <div className="flex justify-between text-sm border-t border-gray-200 dark:border-gray-700 pt-2">
               <span className="text-gray-500">{activeTab === "buy" ? "Total bayar" : "Total terima"}</span>
               <span className="text-gray-900 dark:text-white font-bold tabular-nums">
-                {activeTab === "buy" ? formatRupiah(calculated.rupiah) : formatGram(calculated.gram)}
+                {formatRupiah(calculated.rupiah)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -238,7 +301,7 @@ export default function TradePanel({ currentPrice, userBalance, isLoading }) {
             <Button variant="secondary" fullWidth onClick={() => setShowConfirm(false)}>
               Batal
             </Button>
-            <Button fullWidth onClick={handleConfirm} className={activeTab === "buy" ? "bg-emerald-500 hover:bg-emerald-400" : "bg-red-500 hover:bg-red-400"}>
+            <Button variant={activeTab === "buy" ? "buy" : "sell"} fullWidth onClick={handleConfirm}>
               Konfirmasi
             </Button>
           </div>

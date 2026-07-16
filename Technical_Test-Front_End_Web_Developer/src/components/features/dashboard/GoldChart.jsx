@@ -39,8 +39,8 @@ export default function GoldChart({ data, isLoading }) {
 
   const tickColor = isDark ? "#9ca3af" : "#9ca3af";
   const gridColor = isDark ? "rgba(156,163,175,0.08)" : "rgba(156,163,175,0.1)";
-  const buyFill = isDark ? "rgba(245, 158, 11, 0.15)" : "rgba(245, 158, 11, 0.1)";
-  const sellFill = isDark ? "rgba(16, 185, 129, 0.1)" : "rgba(16, 185, 129, 0.05)";
+  const buyFill = isDark ? "rgba(16, 185, 129, 0.15)" : "rgba(16, 185, 129, 0.1)";
+  const sellFill = isDark ? "rgba(245, 158, 11, 0.1)" : "rgba(245, 158, 11, 0.05)";
 
   const chartData = {
     labels,
@@ -48,26 +48,27 @@ export default function GoldChart({ data, isLoading }) {
       {
         label: "Harga Beli",
         data: data.map((d) => d.buy),
-        borderColor: "#f59e0b",
-        backgroundColor: buyFill,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 0,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "#f59e0b",
-        borderWidth: 2,
-      },
-      {
-        label: "Harga Jual",
-        data: data.map((d) => d.sell),
         borderColor: "#10b981",
-        backgroundColor: sellFill,
+        backgroundColor: buyFill,
         fill: true,
         tension: 0.4,
         pointRadius: 0,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: "#10b981",
         borderWidth: 2,
+      },
+      {
+        label: "Harga Jual",
+        data: data.map((d) => d.sell),
+        borderColor: "#f59e0b",
+        backgroundColor: sellFill,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#f59e0b",
+        borderWidth: 2,
+        borderDash: [6, 3],
       },
     ],
   };
@@ -129,11 +130,11 @@ export default function GoldChart({ data, isLoading }) {
         </h3>
         <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             Beli
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
             Jual
           </span>
         </div>

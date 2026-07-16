@@ -11,7 +11,7 @@ function getSystemTheme() {
 
 function getStoredTheme() {
   if (typeof window === "undefined") return null;
-  const stored = localStorage.getItem("halogold_theme");
+  const stored = localStorage.getItem("Halo Emas_theme");
   if (stored === "dark") return true;
   if (stored === "light") return false;
   return null;
@@ -42,7 +42,7 @@ export function ThemeProvider({ children }) {
   const toggle = useCallback(() => {
     setIsDark((prev) => {
       const next = !prev;
-      localStorage.setItem("halogold_theme", next ? "dark" : "light");
+      localStorage.setItem("Halo Emas_theme", next ? "dark" : "light");
       return next;
     });
   }, []);

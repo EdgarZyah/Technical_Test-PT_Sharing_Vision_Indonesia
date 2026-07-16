@@ -5,38 +5,59 @@ import { TrendingUp, TrendingDown } from "lucide-react";
 import { formatRupiah, formatGram } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
 
-export default function MarketHeader({ price, isLoading }) {
+export default function MarketHeader({ price, priceHistory = [], userBalance = 0, rupiahBalance = 0, isLoading }) {
   if (isLoading || !price) {
     return (
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
-        <div className="flex items-center gap-4">
-          <Skeleton className="h-8 w-36 bg-gray-200 dark:bg-gray-700" />
-          <Skeleton className="h-6 w-28 bg-gray-200 dark:bg-gray-700" />
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-center gap-2">
+            <Skeleton className="w-7 h-7 rounded-lg shrink-0" />
+            <div className="space-y-1">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+          </div>
+          <Skeleton className="h-7 w-36" />
+          <div className="hidden md:flex items-center gap-5 ml-auto">
+            <div className="space-y-1">
+              <Skeleton className="h-2.5 w-8" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <div className="space-y-1">
+              <Skeleton className="h-2.5 w-8" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <div className="space-y-1">
+              <Skeleton className="h-2.5 w-8" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  const prevBuy = price.buy - 1400;
-  const change = price.buy - prevBuy;
-  const changePercent = ((change / prevBuy) * 100).toFixed(2);
+  const sorted = [...priceHistory].sort((a, b) => a.date.localeCompare(b.date));
+  const currentIdx = sorted.findIndex((p) => p.date === price.date);
+  const prevPrice = currentIdx > 0 ? sorted[currentIdx - 1] : sorted[sorted.length - 2];
+  const change = prevPrice ? price.buy - prevPrice.buy : 0;
+  const changePercent = prevPrice && prevPrice.buy > 0
+    ? ((change / prevPrice.buy) * 100).toFixed(2)
+    : "0.00";
   const isUp = change >= 0;
 
   return (
     <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0">
-            <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">Au</span>
+          <div className="w-7 h-7 flex items-center justify-center shrink-0">
+            <img src="/images/gold-bar.png" alt="" className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <h2 className="text-gray-900 dark:text-white font-bold text-base sm:text-lg">GOLD/IDR</h2>
-              <span className="px-1.5 py-0.5 text-[9px] font-semibold rounded bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
-                SPOT
-              </span>
             </div>
-            <p className="text-gray-500 text-[10px] sm:text-xs">HaloGold Emas Digital</p>
+            <p className="text-gray-500 text-[10px] sm:text-xs">Halo Emas Emas Digital</p>
           </div>
         </div>
 
@@ -71,8 +92,12 @@ export default function MarketHeader({ price, isLoading }) {
             <p className="text-sm font-semibold text-red-600 dark:text-red-400 tabular-nums">{formatRupiah(price.sell)}</p>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 uppercase tracking-wider">Saldo</p>
-            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 tabular-nums">{formatGram(0)}</p>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider">Saldo Emas</p>
+            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 tabular-nums">{formatGram(userBalance)}</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider">Saldo Rupiah</p>
+            <p className="text-sm font-semibold text-amber-600 dark:text-amber-400 tabular-nums">{formatRupiah(rupiahBalance)}</p>
           </div>
         </div>
       </div>

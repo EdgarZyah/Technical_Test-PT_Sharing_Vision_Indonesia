@@ -31,6 +31,10 @@ const Button = forwardRef(
         "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
       danger:
         "bg-red-500 text-white hover:bg-red-600 shadow-md dark:bg-red-500 dark:hover:bg-red-400",
+      buy:
+        "bg-emerald-500 text-white hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 dark:bg-emerald-500 dark:hover:bg-emerald-400",
+      sell:
+        "bg-red-500 text-white hover:bg-red-400 shadow-lg shadow-red-500/20 dark:bg-red-500 dark:hover:bg-red-400",
     };
 
     const sizes = {

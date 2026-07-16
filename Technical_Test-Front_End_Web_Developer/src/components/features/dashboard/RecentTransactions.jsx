@@ -62,13 +62,13 @@ export default function RecentTransactions({ transactions, isLoading }) {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`p-2.5 rounded-xl ${
+                  className={`p-2 rounded-xl ${
                     tx.type === "BUY"
-                      ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
-                      : "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400"
+                      ? "bg-emerald-50 dark:bg-emerald-900/20"
+                      : "bg-red-50 dark:bg-red-900/20"
                   }`}
                 >
-                  {tx.type === "BUY" ? "Beli" : "Jual"}
+                  <img src="/images/gold-bar.png" alt="" className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">

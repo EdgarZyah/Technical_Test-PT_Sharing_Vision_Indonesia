@@ -34,8 +34,8 @@ export function StatusBadge({ status }) {
 
 export function TypeBadge({ type }) {
   const map = {
-    BUY: { label: "Beli", variant: "info" },
-    SELL: { label: "Jual", variant: "success" },
+    BUY: { label: "Beli", variant: "success" },
+    SELL: { label: "Jual", variant: "danger" },
   };
   const { label, variant } = map[type];
   return <Badge variant={variant}>{label}</Badge>;
