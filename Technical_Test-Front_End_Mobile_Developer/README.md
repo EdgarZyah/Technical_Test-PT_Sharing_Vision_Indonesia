@@ -53,27 +53,27 @@ mock data untuk akun demo
 
 ```
 HaloEmas/
-├── App.js                          # Entry point (GestureHandler + ThemeProvider + Auth + Gold)
+├── App.js                        
 ├── src/
 │   ├── components/
-│   │   ├── Sidebar.js              # Drawer sidebar (logo, nav items, logout)
-│   │   └── Header.js               # App header (hamburger menu, title, dark mode toggle)
+│   │   ├── Sidebar.js              
+│   │   └── Header.js               
 │   ├── constants/
-│   │   └── theme.js                # Color palette (amber/emerald/red/gray), light/dark tokens
+│   │   └── theme.js                
 │   ├── navigation/
-│   │   └── AppNavigator.js         # Drawer (main) + Stack (login) routing
+│   │   └── AppNavigator.js         
 │   ├── screens/
-│   │   ├── LoginScreen.js          # Gradient bg, card form, demo account buttons
-│   │   ├── DashboardScreen.js      # BalanceCard, PriceCard, QuickActions, RecentTx
-│   │   └── BuyGoldScreen.js        # Tab beli/jual, input toggle, summary, modals
+│   │   ├── LoginScreen.js          
+│   │   ├── DashboardScreen.js      
+│   │   └── BuyGoldScreen.js        
 │   ├── services/
-│   │   └── api.js                  # Fetch harga emas dari API (brand ANTAM)
+│   │   └── api.js                  
 │   ├── store/
-│   │   ├── AuthContext.js          # Login/logout/session management
-│   │   ├── GoldContext.js          # Harga emas, kalkulasi, transaksi
-│   │   └── ThemeContext.js         # Dark mode toggle + color tokens
+│   │   ├── AuthContext.js          
+│   │   ├── GoldContext.js          
+│   │   └── ThemeContext.js         
 │   └── utils/
-│       └── formatter.js            # formatRupiah, formatGram, formatDate
+│       └── formatter.js            
 └── package.json
 ```
 
