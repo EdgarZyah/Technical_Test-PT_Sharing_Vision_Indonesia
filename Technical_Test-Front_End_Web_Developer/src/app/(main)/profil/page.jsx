@@ -32,7 +32,7 @@ export default function ProfilPage() {
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 items-stretch">
+    <div className="grid grid-cols-1 gap-6 items-stretch">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <Card className="text-center h-full flex flex-col justify-center">
           <div className="w-20 h-20 rounded-full bg-amber-500 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
@@ -84,37 +84,6 @@ export default function ProfilPage() {
                   </span>
                 </div>
               ))}
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="flex-1">
-          <Card className="h-full">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Informasi Saldo
-            </h3>
-            <div className="space-y-0">
-              <div className="flex items-center justify-between py-2.5 border-b border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-3">
-                  <Coins size={14} className="text-amber-500 shrink-0" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Saldo Emas</span>
-                </div>
-                <span className="text-sm font-medium text-gray-900 dark:text-white tabular-nums">{formatGram(goldBalance)}</span>
-              </div>
-              <div className="flex items-center justify-between py-2.5 border-b border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-3">
-                  <Wallet size={14} className="text-amber-500 shrink-0" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Saldo Rupiah</span>
-                </div>
-                <span className="text-sm font-medium text-gray-900 dark:text-white tabular-nums">{formatRupiah(rupiahBalance)}</span>
-              </div>
-              <div className="flex items-center justify-between py-2.5">
-                <div className="flex items-center gap-3">
-                  <Coins size={14} className="text-emerald-500 shrink-0" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Nilai Total Emas</span>
-                </div>
-                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400 tabular-nums">{formatRupiah(rupiahValue)}</span>
-              </div>
             </div>
           </Card>
         </motion.div>
