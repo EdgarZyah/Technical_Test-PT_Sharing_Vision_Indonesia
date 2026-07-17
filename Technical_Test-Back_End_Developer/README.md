@@ -26,7 +26,7 @@ Technical_Test-Back_End_Developer/
 │   │   ├── gold_handler.go        # Handler untuk transaksi emas
 │   │   ├── user_handler.go        # Handler untuk user (register, profile)
 │   │   └── types.go               # Tipe data request/response untuk Swagger
-│   ├── middleware/middleware.go    # Logger, CORS
+│   ├── middleware/middleware.go   # Logger, CORS
 │   ├── price/
 │   │   └── client.go              # HTTP client + fallback harga emas
 │   ├── repository/
@@ -125,15 +125,6 @@ Semua endpoint transaksi memerlukan header `X-User-ID` atau query parameter `?us
 5. **Cek saldo** emas melalui `GET /api/balance`
 6. **Jual emas** dalam gram melalui `POST /api/sell`
 7. **Lihat riwayat** transaksi melalui `GET /api/transactions`
-
-### Contoh pakai Swagger UI
-
-1. Buka `http://localhost:8080/swagger/index.html`
-2. Klik endpoint **POST /api/register** → Try it out → isi body → Execute
-3. Catat `id` dari response (misal: `1`)
-4. Klik endpoint **GET /api/price** → Execute (tidak perlu header)
-5. Klik endpoint **POST /api/buy** → tambah header `X-User-ID: 1` → isi body `{"amount": 500000}` → Execute
-6. Klik endpoint **GET /api/balance** → tambah header `X-User-ID: 1` → Execute
 
 ## API Endpoints
 
@@ -302,17 +293,6 @@ Harga emas diambil dari API eksternal `https://hargaemas.logikarya.com/api/price
 | `brand` | `ANTAM` | Brand emas |
 | `weight` | `1` | Berat per gram |
 | `length` | `1` | Jumlah record (terbaru) |
-
-### Mapping Harga
-
-| API Field | Backend | Deskripsi |
-|-----------|---------|-----------|
-| `sellPrice` | `buy` | Harga beli (user bayar) |
-| `buybackPrice` | `sell` | Harga jual/buyback (user terima) |
-
-### Fallback
-
-Jika API external tidak tersedia atau gagal diakses, sistem menggunakan data fallback 30 hari dari `internal/price/client.go` dengan rentang harga Rp 1.873.000 - Rp 1.945.200 per gram.
 
 ## Data Dummy
 
