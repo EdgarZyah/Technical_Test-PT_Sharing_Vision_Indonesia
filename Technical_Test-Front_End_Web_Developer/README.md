@@ -4,7 +4,7 @@ Aplikasi web HaloGold adalah platform investasi dan transaksi emas digital yang 
 
 ## Demo Live
 
-https://haloemas-sand.vercel.app
+https://halo-emas.vercel.app/dashboard
 
 ## Tech Stack
 
