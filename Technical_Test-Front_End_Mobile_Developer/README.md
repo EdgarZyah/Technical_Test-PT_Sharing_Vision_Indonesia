@@ -1,24 +1,18 @@
 # HaloEmas - Aplikasi Mobile Investasi Emas Digital
 
-Aplikasi mobile investasi emas digital berdasarkan BRD HaloEmas, dengan desain UI/UX yang konsisten dengan versi web.
+Aplikasi mobile investasi emas digital
 
 ## Fitur
 
-- **Login**: Autentikasi email + password, validasi form, demo account one-tap login
-- **Dashboard**: Balance card (gradient amber), harga emas dari API Antam, quick actions, riwayat transaksi
-- **Beli Emas**: Tab beli/jual, input toggle Rupiah/Gram, quick amounts, konfirmasi modal, success modal
-- **Sidebar Navigation**: Drawer slide-in dari kiri dengan logo, nav items, logout
-- **Dark Mode**: Toggle dark/light mode (tersimpan di AsyncStorage)
-- **Real-time Harga**: Menggunakan API `hargaemas.logikarya.com` brand ANTAM
+- **Login**
+- **Dashboard**
+- **Beli Emas**
+- **Dark Mode**: Toggle dark/light mode
+- **Real-time Harga**: Menggunakan API `hargaemas.logikarya.com`
 
 ## Tech Stack
 
 - React Native (Expo SDK 57)
-- React Navigation (Drawer + Native Stack)
-- React Context + useReducer (State Management)
-- AsyncStorage (Persistent Storage + Theme)
-- Expo Linear Gradient
-- API: `https://hargaemas.logikarya.com/api/prices?brand=ANTAM`
 
 ## Cara Menjalankan
 
@@ -51,7 +45,7 @@ eas build -p android --profile preview
 ```
 
 ## Akun Demo
-
+mock data untuk akun demo 
 - **Email**: demo@haloemas.com
 - **Password**: password123
 
@@ -90,19 +84,3 @@ Harga emas diambil dari `https://hargaemas.logikarya.com/api/prices` dengan para
 - `source=galeri24`
 - `weight=1`
 - `length=30`
-
-Response di-map ke format: `{ buy (sellPrice), sell (buybackPrice), date (recordedDate) }`
-
-## Tema UI/UX
-
-Menggunakan palette warna yang sama dengan versi web:
-- **Primary**: Amber (#f59e0b)
-- **Buy/Success**: Emerald (#10b981)
-- **Sell/Error**: Red (#ef4444)
-- **Cards**: rounded-2xl (16px), border, shadow-sm
-- **Nav items**: rounded-xl (12px), amber active state
-- **Dark mode**: gray-800/900 palette
-
-## License
-
-MIT
