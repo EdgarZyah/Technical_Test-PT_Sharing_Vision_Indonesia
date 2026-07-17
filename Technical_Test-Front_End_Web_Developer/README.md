@@ -1,6 +1,6 @@
-# HaloGold - Investasi Emas Digital
+# HaloEmas - Investasi Emas Digital
 
-Aplikasi web HaloGold adalah platform investasi dan transaksi emas digital yang dibangun dengan Next.js. Aplikasi ini memungkinkan pengguna membeli emas, melihat riwayat transaksi, memantau harga emas, dan mengelola profil.
+Aplikasi web HaloEmas adalah platform investasi dan transaksi emas digital yang dibangun dengan Next.js. Aplikasi ini memungkinkan pengguna membeli emas, melihat riwayat transaksi, memantau harga emas, dan mengelola profil.
 
 ## Demo Live
 
