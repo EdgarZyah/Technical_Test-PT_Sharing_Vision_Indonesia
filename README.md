@@ -1,6 +1,6 @@
 # Technical Test - PT Sharing Vision Indonesia
 
-Platform digital investasi emas **HaloEmas** — terdiri dari 3 technical test: Back End, Front-End Web, dan Front-End Mobile.
+Platform digital investasi emas **HaloEmas** terdiri dari 3 technical test: Back End, Front-End Web, dan Front-End Mobile.
 
 ---
 
