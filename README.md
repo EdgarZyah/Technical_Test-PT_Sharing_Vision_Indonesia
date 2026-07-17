@@ -4,28 +4,6 @@ Platform digital investasi emas **HaloEmas** — terdiri dari 3 technical test: 
 
 ---
 
-## Technical Test - Back End Developer
-
-**Path:** `Technical_Test-Back_End_Developer/`
-
-REST API untuk aplikasi HaloEmas.
-
-| Tech | Detail |
-|------|--------|
-| Bahasa | Go (Golang) |
-| Database | PostgreSQL |
-| Router | chi |
-| Docs | Swagger (swaggo) |
-| Price API | hargaemas.logikarya.com (Antam) |
-
-- 7 endpoint: register, profile, price, buy, sell, balance, transactions
-- Harga emas real-time dari API eksternal dengan fallback mock 30 hari
-- Clean Architecture: handler → service → repository → database
-- Swagger UI di `/swagger/index.html`
-- Lihat `Technical_Test-Back_End_Developer/README.md` untuk cara menjalankan
-
----
-
 ## Technical Test - Front End Web Developer
 
 **Path:** `Technical_Test-Front_End_Web_Developer/`
@@ -68,3 +46,27 @@ Aplikasi mobile untuk investasi emas digital.
 - Auto-login dengan AsyncStorage persistence
 - Build Android APK via EAS Build
 - Lihat `Technical_Test-Front_End_Mobile_Developer/HaloEmas/README.md` untuk cara menjalankan
+
+---
+
+## Technical Test - Back End Developer
+
+**Path:** `Technical_Test-Back_End_Developer/`
+
+REST API untuk aplikasi HaloEmas.
+
+| Tech | Detail |
+|------|--------|
+| Bahasa | Go (Golang) |
+| Database | PostgreSQL |
+| Router | chi |
+| Docs | Swagger (swaggo) |
+| Price API | hargaemas.logikarya.com (Antam) |
+
+- 7 endpoint: register, profile, price, buy, sell, balance, transactions
+- Harga emas real-time dari API eksternal dengan fallback mock 30 hari
+- Clean Architecture: handler → service → repository → database
+- Swagger UI di `/swagger/index.html`
+- Lihat `Technical_Test-Back_End_Developer/README.md` untuk cara menjalankan
+
+---
