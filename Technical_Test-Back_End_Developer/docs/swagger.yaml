@@ -1,0 +1,312 @@
+basePath: /
+definitions:
+  handler.BalanceResponse:
+    properties:
+      amount:
+        example: 1110000
+        type: integer
+      gram:
+        example: 0.571
+        type: number
+    type: object
+  handler.BuyRequest:
+    properties:
+      amount:
+        example: 500000
+        type: integer
+    type: object
+  handler.BuyResponse:
+    properties:
+      gram:
+        example: 0.257
+        type: number
+      price:
+        example: 1945200
+        type: integer
+    type: object
+  handler.ErrorResponse:
+    properties:
+      error:
+        example: Amount harus lebih dari 0
+        type: string
+    type: object
+  handler.PriceResponse:
+    properties:
+      buy:
+        example: 1945200
+        type: integer
+      date:
+        example: "2026-07-16"
+        type: string
+      sell:
+        example: 1925000
+        type: integer
+    type: object
+  handler.ProfileResponse:
+    properties:
+      amount:
+        example: 1110000
+        type: integer
+      email:
+        example: budi@example.com
+        type: string
+      gram:
+        example: 0.571
+        type: number
+      id:
+        example: 1
+        type: integer
+      nama:
+        example: Budi Hartono
+        type: string
+    type: object
+  handler.RegisterRequest:
+    properties:
+      email:
+        example: budi@example.com
+        type: string
+      nama:
+        example: Budi Hartono
+        type: string
+    type: object
+  handler.RegisterResponse:
+    properties:
+      email:
+        example: budi@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      message:
+        example: Registrasi berhasil
+        type: string
+      nama:
+        example: Budi Hartono
+        type: string
+    type: object
+  handler.SellRequest:
+    properties:
+      gram:
+        example: 1
+        type: number
+    type: object
+  handler.SellResponse:
+    properties:
+      amount:
+        example: 1925000
+        type: integer
+    type: object
+  handler.Transaction:
+    properties:
+      amount:
+        example: 500000
+        type: integer
+      created_at:
+        example: "2026-07-10T10:00:00Z"
+        type: string
+      gram:
+        example: 0.257
+        type: number
+      id:
+        example: 1
+        type: integer
+      type:
+        example: BUY
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: |-
+    REST API untuk aplikasi HaloEmas - platform digital investasi dan transaksi emas.
+    Harga emas diambil dari https://hargaemas.logikarya.com (Antam).
+  title: HaloEmas API
+  version: "1.0"
+paths:
+  /api/balance:
+    get:
+      description: Menampilkan saldo emas user dalam gram dan nilai Rupiah berdasarkan
+        harga jual terkini
+      parameters:
+      - description: User ID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.BalanceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get gold balance
+      tags:
+      - Balance
+  /api/buy:
+    post:
+      consumes:
+      - application/json
+      description: Membeli emas berdasarkan nominal Rupiah menggunakan harga beli
+        Antam terkini
+      parameters:
+      - description: User ID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Jumlah pembelian dalam Rupiah
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.BuyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.BuyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Buy gold
+      tags:
+      - Gold
+  /api/price:
+    get:
+      description: Mengembalikan harga emas Antam terkini (buy/sell) dari API hargaemas.logikarya.com
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.PriceResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get gold price
+      tags:
+      - Gold
+  /api/profile:
+    get:
+      description: Menampilkan profil user termasuk saldo emas
+      parameters:
+      - description: User ID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get user profile
+      tags:
+      - User
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Mendaftarkan user baru
+      parameters:
+      - description: Data user baru
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Register new user
+      tags:
+      - User
+  /api/sell:
+    post:
+      consumes:
+      - application/json
+      description: Menjual emas berdasarkan berat gram menggunakan harga jual (buyback)
+        Antam terkini
+      parameters:
+      - description: User ID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      - description: Jumlah emas yang dijual dalam gram
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SellRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SellResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Sell gold
+      tags:
+      - Gold
+  /api/transactions:
+    get:
+      description: Menampilkan daftar riwayat transaksi user
+      parameters:
+      - description: User ID
+        in: header
+        name: X-User-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.Transaction'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get transactions
+      tags:
+      - Transactions
+swagger: "2.0"
