@@ -1,3 +1,4 @@
+// Package handler menyediakan HTTP handler untuk endpoint transaksi emas.
 package handler
 
 import (
@@ -9,10 +10,12 @@ import (
 	"haloemas-api/internal/service"
 )
 
+// GoldHandler menangani HTTP request terkait transaksi emas.
 type GoldHandler struct {
 	goldService *service.GoldService
 }
 
+// NewGoldHandler membuat handler baru dengan GoldService.
 func NewGoldHandler(goldService *service.GoldService) *GoldHandler {
 	return &GoldHandler{goldService: goldService}
 }
@@ -70,6 +73,7 @@ func (h *GoldHandler) Buy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Ambil harga terkini untuk dimasukkan ke response
 	p := h.goldService.GetPrice()
 	response.JSON(w, http.StatusOK, BuyResponse{
 		Gram:  tx.Gram,
@@ -140,6 +144,7 @@ func (h *GoldHandler) GetTransactions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Return array kosong (bukan null) jika tidak ada transaksi
 	if transactions == nil {
 		response.JSON(w, http.StatusOK, []map[string]interface{}{})
 		return
@@ -170,6 +175,7 @@ func (h *GoldHandler) GetBalance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Konversi gram ke Rupiah menggunakan harga jual terkini
 	p := h.goldService.GetPrice()
 	amount := int64(balance * float64(p.Sell))
 
@@ -179,6 +185,8 @@ func (h *GoldHandler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// extractUserID mengekstrak user ID dari header X-User-ID atau query parameter user_id.
+// Header X-User-ID diprioritaskan. Mengembalikan error jika tidak valid atau kosong.
 func extractUserID(r *http.Request) (int64, error) {
 	userIDStr := r.Header.Get("X-User-ID")
 	if userIDStr == "" {

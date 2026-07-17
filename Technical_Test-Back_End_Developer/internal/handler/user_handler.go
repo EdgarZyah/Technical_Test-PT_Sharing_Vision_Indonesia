@@ -9,11 +9,13 @@ import (
 	"haloemas-api/internal/service"
 )
 
+// UserHandler menangani HTTP request terkait user (register, profile).
 type UserHandler struct {
 	goldService *service.GoldService
-	db          *sql.DB
+	db          *sql.DB // Digunakan langsung untuk query profile (bypass repo layer)
 }
 
+// NewUserHandler membuat handler baru.
 func NewUserHandler(goldService *service.GoldService, db *sql.DB) *UserHandler {
 	return &UserHandler{goldService: goldService, db: db}
 }
@@ -35,6 +37,8 @@ func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Query langsung ke database untuk data profil
+	// (bypass repository layer untuk query sederhana)
 	var nama, email string
 	err = h.db.QueryRow("SELECT nama, email FROM users WHERE id = $1", userID).
 		Scan(&nama, &email)
@@ -47,12 +51,14 @@ func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Hitung saldo emas user
 	balance, err := h.goldService.GetUserBalance(userID)
 	if err != nil {
 		response.Error(w, http.StatusInternalServerError, "Gagal menghitung saldo")
 		return
 	}
 
+	// Konversi gram ke Rupiah menggunakan harga jual terkini
 	p := h.goldService.GetPrice()
 	amount := int64(balance * float64(p.Sell))
 
@@ -111,13 +117,13 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// RegisterRequest represents the request body for registering a new user.
+// RegisterRequest adalah request body untuk registrasi user baru.
 type RegisterRequest struct {
 	Nama  string `json:"nama" example:"Budi Hartono"`
 	Email string `json:"email" example:"budi@example.com"`
 }
 
-// RegisterResponse represents the response after registering a new user.
+// RegisterResponse adalah response setelah registrasi user berhasil.
 type RegisterResponse struct {
 	ID      int64  `json:"id" example:"1"`
 	Nama    string `json:"nama" example:"Budi Hartono"`
@@ -125,7 +131,7 @@ type RegisterResponse struct {
 	Message string `json:"message" example:"Registrasi berhasil"`
 }
 
-// ProfileResponse represents the user profile with balance.
+// ProfileResponse adalah response profil user beserta saldo emas.
 type ProfileResponse struct {
 	ID     int64   `json:"id" example:"1"`
 	Nama   string  `json:"nama" example:"Budi Hartono"`

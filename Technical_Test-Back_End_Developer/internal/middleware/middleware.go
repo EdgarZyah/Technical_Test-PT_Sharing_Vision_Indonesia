@@ -1,3 +1,4 @@
+// Package middleware menyediakan HTTP middleware untuk logging, CORS, dan content type.
 package middleware
 
 import (
@@ -6,6 +7,7 @@ import (
 	"time"
 )
 
+// Logger mencatat setiap request HTTP dengan method, path, remote address, dan durasi.
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -15,6 +17,8 @@ func Logger(next http.Handler) http.Handler {
 	})
 }
 
+// CORS mengatur Cross-Origin Resource Sharing headers.
+// Request OPTIONS di-handle langsung tanpa melanjutkan ke handler berikutnya.
 func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -30,6 +34,7 @@ func CORS(next http.Handler) http.Handler {
 	})
 }
 
+// ContentTypeJSON mengatur header Content-Type ke application/json.
 func ContentTypeJSON(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

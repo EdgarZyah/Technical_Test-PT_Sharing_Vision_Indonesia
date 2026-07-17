@@ -1,3 +1,5 @@
+// Package price menyediakan HTTP client untuk mengambil harga emas dari API eksternal
+// dan fallback ke data mock 30 hari jika API tidak tersedia.
 package price
 
 import (
@@ -9,28 +11,35 @@ import (
 	"time"
 )
 
+// GoldPrice merepresentasikan harga emas terkini.
 type GoldPrice struct {
-	Buy  int64
-	Sell int64
-	Date string
+	Buy  int64  // Harga beli emas per gram (yang dibayar pembeli)
+	Sell int64  // Harga jual/buyback per gram (yang diterima saat menjual)
+	Date string // Tanggal pencatatan harga (format: "2006-01-02")
 }
 
+// apiResponse adalah struktur response dari API hargaemas.logikarya.com.
 type apiResponse struct {
 	Success bool        `json:"success"`
 	Data    []apiRecord `json:"data"`
 }
 
+// apiRecord merepresentasikan satu record harga dari API.
+// SellPrice dari API = harga beli untuk user (GoldPrice.Buy).
+// BuybackPrice dari API = harga jual untuk user (GoldPrice.Sell).
 type apiRecord struct {
-	SellPrice    int64  `json:"sellPrice"`
-	BuybackPrice int64  `json:"buybackPrice"`
-	RecordedDate string `json:"recordedDate"`
+	SellPrice    int64  `json:"sellPrice"`    // Harga jual dari perspective API = harga beli user
+	BuybackPrice int64  `json:"buybackPrice"` // Harga buyback dari perspective API = harga jual user
+	RecordedDate string `json:"recordedDate"` // Tanggal pencatatan
 }
 
+// Client adalah HTTP client untuk mengambil harga emas dari API eksternal.
 type Client struct {
-	baseURL    string
-	httpClient *http.Client
+	baseURL    string     // Base URL API harga emas
+	httpClient *http.Client // HTTP client dengan timeout 10 detik
 }
 
+// NewClient membuat price client baru dengan base URL yang diberikan.
 func NewClient(baseURL string) *Client {
 	return &Client{
 		baseURL: baseURL,
@@ -40,6 +49,8 @@ func NewClient(baseURL string) *Client {
 	}
 }
 
+// FetchLatestPrice mengambil harga emas terkini dari API.
+// Jika API gagal diakses, mengembalikan data fallback dari mockPrices.
 func (c *Client) FetchLatestPrice() GoldPrice {
 	price, err := c.fetchFromAPI()
 	if err != nil {
@@ -49,6 +60,8 @@ func (c *Client) FetchLatestPrice() GoldPrice {
 	return price
 }
 
+// fetchFromAPI melakukan HTTP GET ke API harga emas dan parse response.
+// Parameter: source=galeri24, brand=ANTAM, weight=1, length=1 (terbaru saja).
 func (c *Client) fetchFromAPI() (GoldPrice, error) {
 	url := fmt.Sprintf("%s/api/prices?source=galeri24&brand=ANTAM&weight=1&length=1", c.baseURL)
 
@@ -76,6 +89,8 @@ func (c *Client) fetchFromAPI() (GoldPrice, error) {
 		return GoldPrice{}, fmt.Errorf("API returned no data")
 	}
 
+	// Mapping: sellPrice API → Buy (harga yang user bayar)
+	//          buybackPrice API → Sell (harga yang user terima saat jual)
 	latest := apiResp.Data[0]
 	return GoldPrice{
 		Buy:  latest.SellPrice,
@@ -84,12 +99,16 @@ func (c *Client) fetchFromAPI() (GoldPrice, error) {
 	}, nil
 }
 
+// mockPriceRecord adalah struktur data mock untuk fallback harga.
 type mockPriceRecord struct {
 	Buy  int64
 	Sell int64
 	Date string
 }
 
+// mockPrices berisi data harga emas dummy selama 30 hari terakhir.
+// Digunakan sebagai fallback jika API eksternal tidak tersedia.
+// Rentang harga: Rp 1.873.000 - Rp 1.945.200 per gram.
 var mockPrices = []mockPriceRecord{
 	{Buy: 1945200, Sell: 1925000, Date: "2026-07-16"},
 	{Buy: 1943800, Sell: 1923500, Date: "2026-07-15"},
@@ -123,6 +142,7 @@ var mockPrices = []mockPriceRecord{
 	{Buy: 1873000, Sell: 1855200, Date: "2026-06-17"},
 }
 
+// getLatestFallback mengembalikan harga terbaru dari data mock.
 func getLatestFallback() GoldPrice {
 	latest := mockPrices[0]
 	return GoldPrice{
@@ -132,6 +152,7 @@ func getLatestFallback() GoldPrice {
 	}
 }
 
+// GetAllFallbackPrices mengembalikan seluruh data harga mock (30 hari).
 func GetAllFallbackPrices() []GoldPrice {
 	prices := make([]GoldPrice, len(mockPrices))
 	for i, p := range mockPrices {
